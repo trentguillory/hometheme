@@ -13,6 +13,11 @@
 		84519A31252693A20055542B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84519A30252693A20055542B /* Preview Assets.xcassets */; };
 		84519A3C252693A20055542B /* HomeThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A3B252693A20055542B /* HomeThemeTests.swift */; };
 		84519A47252693A20055542B /* HomeThemeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A46252693A20055542B /* HomeThemeUITests.swift */; };
+		84519A55252693B80055542B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A54252693B80055542B /* NetworkManager.swift */; };
+		84519A582526970D0055542B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A572526970D0055542B /* Theme.swift */; };
+		84519A5A2526976F0055542B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A592526976F0055542B /* Asset.swift */; };
+		84519A5E2526D2D70055542B /* ThemeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A5D2526D2D70055542B /* ThemeListView.swift */; };
+		84519A602526DBAA0055542B /* ThemesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A5F2526DBAA0055542B /* ThemesViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +50,11 @@
 		84519A42252693A20055542B /* HomeThemeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HomeThemeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84519A46252693A20055542B /* HomeThemeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeThemeUITests.swift; sourceTree = "<group>"; };
 		84519A48252693A20055542B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84519A54252693B80055542B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		84519A572526970D0055542B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		84519A592526976F0055542B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		84519A5D2526D2D70055542B /* ThemeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeListView.swift; sourceTree = "<group>"; };
+		84519A5F2526DBAA0055542B /* ThemesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,11 +105,15 @@
 		84519A282526939F0055542B /* HomeTheme */ = {
 			isa = PBXGroup;
 			children = (
+				84519A5D2526D2D70055542B /* ThemeListView.swift */,
+				84519A54252693B80055542B /* NetworkManager.swift */,
+				84519A56252696FE0055542B /* Models */,
 				84519A292526939F0055542B /* HomeThemeApp.swift */,
 				84519A2B2526939F0055542B /* ContentView.swift */,
 				84519A2D252693A20055542B /* Assets.xcassets */,
 				84519A32252693A20055542B /* Info.plist */,
 				84519A2F252693A20055542B /* Preview Content */,
+				84519A5F2526DBAA0055542B /* ThemesViewModel.swift */,
 			);
 			path = HomeTheme;
 			sourceTree = "<group>";
@@ -128,6 +142,15 @@
 				84519A48252693A20055542B /* Info.plist */,
 			);
 			path = HomeThemeUITests;
+			sourceTree = "<group>";
+		};
+		84519A56252696FE0055542B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84519A572526970D0055542B /* Theme.swift */,
+				84519A592526976F0055542B /* Asset.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +282,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84519A5E2526D2D70055542B /* ThemeListView.swift in Sources */,
+				84519A602526DBAA0055542B /* ThemesViewModel.swift in Sources */,
+				84519A55252693B80055542B /* NetworkManager.swift in Sources */,
+				84519A582526970D0055542B /* Theme.swift in Sources */,
+				84519A5A2526976F0055542B /* Asset.swift in Sources */,
 				84519A2C2526939F0055542B /* ContentView.swift in Sources */,
 				84519A2A2526939F0055542B /* HomeThemeApp.swift in Sources */,
 			);
