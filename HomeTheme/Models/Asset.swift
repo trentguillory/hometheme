@@ -8,20 +8,19 @@
 import Foundation
 import SwiftUI
 
-struct Asset: Codable {
+struct Asset: Decodable {
     var name: String
     var alternativeText: String
     var largeImage: URL?
     var mediumImage: URL?
-    var smallImage: URL?
     var thumbnailImage: URL?
     
-    enum CodingKeys: CodingKey {
-        case name, alternativeText, formats
+    enum CodingKeys: String, CodingKey {
+        case image, name, alternativeText = "alternativetext"
     }
     
-    enum AssetFormatKeys: CodingKey {
-        case large, medium, small, thumbnail
+    enum ImageCodingKeys: CodingKey {
+        case url, medium, thumbnail
     }
     
     enum FormatPropertyKeys: CodingKey {
@@ -32,38 +31,17 @@ struct Asset: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)
         alternativeText = try container.decode(String.self, forKey: .alternativeText)
-        
-        let formatContainer = try container.nestedContainer(keyedBy: AssetFormatKeys.self, forKey: .formats)
-        
-        let largeImageContainer = try formatContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .large)
-        let largeImagePath = try largeImageContainer.decode(String.self, forKey: .url)
-        
-        let mediumImageContainer = try formatContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .medium)
+
+        let imageContainer = try container.nestedContainer(keyedBy: ImageCodingKeys.self, forKey: .image)
+        let largeImagePath = try imageContainer.decode(String.self, forKey: .url)
+        largeImage = URL(string: largeImagePath)
+
+        let mediumImageContainer = try imageContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .medium)
         let mediumImagePath = try mediumImageContainer.decode(String.self, forKey: .url)
-        
-        let smallImageContainer = try formatContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .small)
-        let smallImagePath = try smallImageContainer.decode(String.self, forKey: .url)
-        
-        let thumbnailImageContainer = try formatContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .thumbnail)
+        mediumImage = URL(string: mediumImagePath)
+
+        let thumbnailImageContainer = try imageContainer.nestedContainer(keyedBy: FormatPropertyKeys.self, forKey: .thumbnail)
         let thumbnailImagePath = try thumbnailImageContainer.decode(String.self, forKey: .url)
-        
-        largeImage = NetworkManager.urlForPath(path: largeImagePath)
-        mediumImage = NetworkManager.urlForPath(path: mediumImagePath)
-        smallImage = NetworkManager.urlForPath(path: smallImagePath)
-        thumbnailImage = NetworkManager.urlForPath(path: thumbnailImagePath)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(name, forKey: .name)
-        try container.encode(alternativeText, forKey: .alternativeText)
-        
-        // TODO: Verify if this is useful. We likely need to upload
-        // images elsewhere and always read back the url.
-        var formatContainer = container.nestedContainer(keyedBy: AssetFormatKeys.self, forKey: .formats)
-        try formatContainer.encode(largeImage, forKey: .large)
-        try formatContainer.encode(mediumImage, forKey: .medium)
-        try formatContainer.encode(smallImage, forKey: .small)
-        try formatContainer.encode(thumbnailImage, forKey: .thumbnail)
+        thumbnailImage = URL(string: thumbnailImagePath)
     }
 }

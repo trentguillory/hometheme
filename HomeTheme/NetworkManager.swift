@@ -14,11 +14,11 @@ class NetworkManager {
     //var themesViewModel: ThemesViewModel
     
     // HOST
-    static let scheme = "http"
-    static let host = "192.168.0.127"
+    static let scheme = "https"
+    static let host = "hometheme.cdn.prismic.io"
     
     // ENDPOINTS
-    static let themesPath = "/themes"
+    static let themesPath = "/api/v2/documents/search?q=[[at(document.type,\"theme\")]]"
     var themesURL: URL? {
         NetworkManager.urlForPath(path: NetworkManager.themesPath)
     }
@@ -73,8 +73,9 @@ extension NetworkManager {
         var components = URLComponents()
         components.scheme = NetworkManager.scheme
         components.host = NetworkManager.host
-        components.port = 1337
         components.path = path
+        components.queryItems = [URLQueryItem(name: "ref", value: "X3zuYhUAACcAiPZD"),
+                                 URLQueryItem(name: "access_token", value: "MC5YM3oxNEJVQUFDb0FpUmdI.77-977-977-977-977-9J1jvv70R77-977-9bhPvv73vv70R77-977-977-9MAfvv73vv70bYhhY77-9Nnthag")]
         
         return components.url
     }
