@@ -18,9 +18,9 @@ class NetworkManager {
     static let host = "hometheme.cdn.prismic.io"
     
     // ENDPOINTS
-    static let themesPath = "/api/v2/documents/search?q=[[at(document.type,\"theme\")]]"
+    static let themesPath = "/api/v2/documents/search"
     var themesURL: URL? {
-        NetworkManager.urlForPath(path: NetworkManager.themesPath)
+        return NetworkManager.urlForPath(path: NetworkManager.themesPath)
     }
     
 //    private init() {
@@ -50,13 +50,16 @@ class NetworkManager {
     }
     
     func getThemes(completion: @escaping ([Theme]) -> Void) {
-        
         request(url: themesURL) { result in
             switch result {
             case .success(let data):
+
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("Response: \(json)")
+
                 let decoder = JSONDecoder()
-                if let themes = try? decoder.decode([Theme].self, from: data) {
-                    completion(themes)
+                if let page = try? decoder.decode(Page<Theme>.self, from: data) {
+                    completion(page.results)
                 } else {
                     print("Can't decode.")
                 }
@@ -74,9 +77,10 @@ extension NetworkManager {
         components.scheme = NetworkManager.scheme
         components.host = NetworkManager.host
         components.path = path
-        components.queryItems = [URLQueryItem(name: "ref", value: "X3zuYhUAACcAiPZD"),
+        components.queryItems = [URLQueryItem(name: "q", value: "[[at(document.type,\"theme\")]]"),
+                                 URLQueryItem(name: "ref", value: "X3zuYhUAACcAiPZD"),
                                  URLQueryItem(name: "access_token", value: "MC5YM3oxNEJVQUFDb0FpUmdI.77-977-977-977-977-9J1jvv70R77-977-9bhPvv73vv70R77-977-977-9MAfvv73vv70bYhhY77-9Nnthag")]
-        
+
         return components.url
     }
 }

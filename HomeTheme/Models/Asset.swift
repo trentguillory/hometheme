@@ -16,7 +16,7 @@ struct Asset: Decodable {
     var thumbnailImage: URL?
     
     enum CodingKeys: String, CodingKey {
-        case image, name, alternativeText = "alternativetext"
+        case image, name, alternativeText = "alternative_text"
     }
     
     enum ImageCodingKeys: CodingKey {
