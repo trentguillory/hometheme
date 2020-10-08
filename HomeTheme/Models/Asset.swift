@@ -15,6 +15,8 @@ struct Asset: Codable {
     var mediumImage: URL?
     var smallImage: URL?
     var thumbnailImage: URL?
+
+    var testStaticImage: Image?
     
     enum CodingKeys: CodingKey {
         case name, alternativeText, formats
@@ -51,6 +53,12 @@ struct Asset: Codable {
         mediumImage = NetworkManager.urlForPath(path: mediumImagePath)
         smallImage = NetworkManager.urlForPath(path: smallImagePath)
         thumbnailImage = NetworkManager.urlForPath(path: thumbnailImagePath)
+    }
+
+    init(name: String, altText: String, image: Image) {
+        self.name = name
+        alternativeText = altText
+        testStaticImage = image
     }
     
     func encode(to encoder: Encoder) throws {

@@ -30,6 +30,16 @@ struct Theme: Codable {
         backgrounds = try container.decode([Asset].self, forKey: .backgrounds)
         previews = try container.decode([Asset].self, forKey: .previews)
     }
+
+    init(icons: [Asset], widgetPhotos: [Asset], backgrounds: [Asset], previews: [Asset]) {
+        id = 123
+        title = "macOS Theme"
+        description = "This theme is an icon pack just like the one found on macOS Catalina."
+        self.icons = icons
+        self.widgetPhotos = widgetPhotos
+        self.backgrounds = backgrounds
+        self.previews = previews
+    }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)

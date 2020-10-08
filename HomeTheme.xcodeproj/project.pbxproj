@@ -18,6 +18,9 @@
 		84519A5A2526976F0055542B /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A592526976F0055542B /* Asset.swift */; };
 		84519A5E2526D2D70055542B /* ThemeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A5D2526D2D70055542B /* ThemeListView.swift */; };
 		84519A602526DBAA0055542B /* ThemesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A5F2526DBAA0055542B /* ThemesViewModel.swift */; };
+		845A0368252F99C700E66527 /* ThemeListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845A0367252F99C700E66527 /* ThemeListItem.swift */; };
+		845A036D252F9A4900E66527 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845A036C252F9A4900E66527 /* IconView.swift */; };
+		845A0372252F9CC200E66527 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845A0371252F9CC200E66527 /* GridView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		84519A592526976F0055542B /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		84519A5D2526D2D70055542B /* ThemeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeListView.swift; sourceTree = "<group>"; };
 		84519A5F2526DBAA0055542B /* ThemesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesViewModel.swift; sourceTree = "<group>"; };
+		845A0367252F99C700E66527 /* ThemeListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeListItem.swift; sourceTree = "<group>"; };
+		845A036C252F9A4900E66527 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
+		845A0371252F9CC200E66527 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +120,9 @@
 				84519A32252693A20055542B /* Info.plist */,
 				84519A2F252693A20055542B /* Preview Content */,
 				84519A5F2526DBAA0055542B /* ThemesViewModel.swift */,
+				845A0367252F99C700E66527 /* ThemeListItem.swift */,
+				845A036C252F9A4900E66527 /* IconView.swift */,
+				845A0371252F9CC200E66527 /* GridView.swift */,
 			);
 			path = HomeTheme;
 			sourceTree = "<group>";
@@ -286,8 +295,11 @@
 				84519A602526DBAA0055542B /* ThemesViewModel.swift in Sources */,
 				84519A55252693B80055542B /* NetworkManager.swift in Sources */,
 				84519A582526970D0055542B /* Theme.swift in Sources */,
+				845A036D252F9A4900E66527 /* IconView.swift in Sources */,
+				845A0368252F99C700E66527 /* ThemeListItem.swift in Sources */,
 				84519A5A2526976F0055542B /* Asset.swift in Sources */,
 				84519A2C2526939F0055542B /* ContentView.swift in Sources */,
+				845A0372252F9CC200E66527 /* GridView.swift in Sources */,
 				84519A2A2526939F0055542B /* HomeThemeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
