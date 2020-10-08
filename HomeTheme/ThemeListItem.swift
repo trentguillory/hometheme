@@ -9,28 +9,37 @@ import SwiftUI
 
 struct ThemeListItem: View {
     @State var theme: Theme
-    @State var iconWidth: CGFloat = 50
-    var deviceWidth: CGFloat
+    var geoWidth: CGFloat
+
+    // Amount to decrease each icon by
+    var iconAdjustment: CGFloat = 4
 
     var body: some View {
-        ZStack {
-            theme.backgrounds[0].testStaticImage!
-                .resizable()
-                .frame(width: .infinity, height: iconSize * 2 + iconPadding * 4, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .cornerRadius(16)
+        VStack(alignment: .center) {
             GridStack(rows: 2, columns: 4) { row, col in
                 IconView(icon: theme.icons[row * 4 + col], iconWidth: iconSize)
                     .padding(iconPadding)
             }
+            .padding(gridPadding)
+            .background(
+                theme.backgrounds[0].testStaticImage!
+                    .resizable()
+                    .cornerRadius(16)
+            )
+            Text(theme.title).font(.caption)
         }
+        .padding(4)
     }
 
+    var gridPadding: CGFloat {
+        return iconAdjustment * 2
+    }
     var iconSize: CGFloat {
-        return deviceWidth / 6
+        return geoWidth / 6 - iconAdjustment
     }
     var iconPadding: CGFloat {
-        let leftover = deviceWidth - iconWidth * 4
-        return leftover / 16
+        let leftover = geoWidth - iconSize * 4
+        return leftover / 10
     }
 }
 
@@ -51,9 +60,7 @@ struct ThemeListItem_Previews: PreviewProvider {
 
         return
             GeometryReader { geometry in
-                ThemeListItem(theme: theme, deviceWidth: geometry.size.width)
-                .padding()
-                .background(Color.black)
+                ThemeListItem(theme: theme, geoWidth: geometry.size.width)
             }
     }
 }

@@ -78,9 +78,16 @@ class NetworkManager {
                           Asset(name: "Messages", altText: "", image: Image("messages"))]
         let backgroundImg = Asset(name: "Background", altText: "", image: Image("background"))
 
-        let theme = Theme(icons: iconAssets, widgetPhotos: [], backgrounds: [backgroundImg], previews: [])
+        var theme = Theme(icons: iconAssets, widgetPhotos: [], backgrounds: [backgroundImg], previews: [])
+        var theme2 = theme
+        var theme3 = theme
+        var theme4 = theme
 
-        return [theme, theme, theme, theme]
+        theme2.id = 2
+        theme3.id = 3
+        theme4.id = 4
+
+        return [theme, theme2, theme3, theme4]
     }
 }
 
