@@ -16,19 +16,24 @@ struct ThemeListItem: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            GridStack(rows: 2, columns: 4) { row, col in
-                IconView(icon: theme.icons[row * 4 + col], iconWidth: iconSize)
-                    .padding(iconPadding)
+            VStack {
+                VStack(spacing: -2) {
+                    GridStack(rows: 2, columns: 4) { row, col in
+                        IconView(icon: theme.icons[row * 4 + col], iconWidth: iconSize)
+                            .padding(iconPadding)
+                    }
+                    Text(theme.title).font(.caption).foregroundColor(.white)
+                        .padding(4)
+                }
+                .padding(gridPadding)
             }
-            .padding(gridPadding)
             .background(
                 theme.backgrounds[0].testStaticImage!
                     .resizable()
                     .cornerRadius(16)
             )
-            Text(theme.title).font(.caption)
         }
-        .padding(4)
+        .padding()
     }
 
     var gridPadding: CGFloat {
