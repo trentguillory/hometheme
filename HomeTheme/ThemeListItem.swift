@@ -9,42 +9,64 @@ import SwiftUI
 
 struct ThemeListItem: View {
     @State var theme: Theme
-    var geoWidth: CGFloat
-
-    // Amount to decrease each icon by
-    var iconAdjustment: CGFloat = 4
+    @State var isOpen = false
+    @State var geoWidth: CGFloat
 
     var body: some View {
         VStack(alignment: .center) {
             VStack {
-                VStack(spacing: -2) {
+                VStack(spacing: -2 * iconPadding) {
                     GridStack(rows: 2, columns: 4) { row, col in
                         IconView(icon: theme.icons[row * 4 + col], iconWidth: iconSize)
                             .padding(iconPadding)
                     }
+                    .padding(iconPadding)
                     Text(theme.title).font(.caption).foregroundColor(.white)
-                        .padding(4)
+                        .padding(iconPadding)
                 }
-                .padding(gridPadding)
             }
             .background(
                 theme.backgrounds[0].testStaticImage!
                     .resizable()
-                    .cornerRadius(16)
+                    .cornerRadius(isOpen ? 0 : 16)
             )
         }
-        .padding()
-    }
+        .onTapGesture {
+            if !isOpen {
+                withAnimation {
+                    isOpen = true
+                    geoWidth = geoWidth + 32
+                }
+            } else {
+                withAnimation {
+                    isOpen = false
+                    geoWidth = geoWidth - 32
+                }
+            }
+        }
 
-    var gridPadding: CGFloat {
-        return iconAdjustment * 2
     }
+    // iconWidth * 4 + paddingUnit * 10 = totalWidth
+
     var iconSize: CGFloat {
-        return geoWidth / 6 - iconAdjustment
+        return geoWidth / 6
     }
     var iconPadding: CGFloat {
         let leftover = geoWidth - iconSize * 4
         return leftover / 10
+    }
+}
+
+struct PreferenceViewSetter: View {
+    let themeId: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            Rectangle()
+                .fill(Color.clear)
+                .preference(key: ThemeListPreferenceKey.self,
+                            value: [ThemeListPreferenceData(themeId: self.themeId, rect: geometry.frame(in: .named(themeListCoordSpace)))])
+        }
     }
 }
 

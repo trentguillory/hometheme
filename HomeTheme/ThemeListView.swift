@@ -11,25 +11,29 @@ struct ThemeListView: View {
     @State var themesModel = ThemesViewModel()
     
     var body: some View {
-        GeometryReader { geometry in
-            NavigationView {
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(themesModel.themes, id: \.id) { theme in
-                            ThemeListItem(theme: theme, geoWidth: geometry.size.width - 32)
-                        }
-                    }
-                    Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-                    Button(action: {
-                        NetworkManager.shared.getThemes { themes in
-                            DispatchQueue.main.async {
-                                themesModel.themes = themes
+        ZStack {
+            // FloatingThemeListItem()
+            // Scales without affecting list
+            GeometryReader { geometry in
+                NavigationView {
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(themesModel.themes, id: \.id) { theme in
+                                ThemeListItem(theme: theme, geoWidth: geometry.size.width - 32)
                             }
                         }
-                    }, label: {
-                        Text("Fetch Themes")
-                    })
-                }.navigationBarTitle("Themes")
+                        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+                        Button(action: {
+                            NetworkManager.shared.getThemes { themes in
+                                DispatchQueue.main.async {
+                                    themesModel.themes = themes
+                                }
+                            }
+                        }, label: {
+                            Text("Fetch Themes")
+                        })
+                    }.navigationBarTitle("Themes")
+                }
             }
         }
         .onAppear {
