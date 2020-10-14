@@ -13,6 +13,7 @@ let themeListCoordSpace = "ThemeListCoordinateSpace"
 struct ThemeListPreferenceData: Equatable {
     let themeId: Int
     let rect: CGRect
+    let geoWidth: CGFloat
 }
 
 struct ThemeListPreferenceKey: PreferenceKey {

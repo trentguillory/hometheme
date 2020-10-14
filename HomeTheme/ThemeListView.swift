@@ -9,41 +9,67 @@ import SwiftUI
 
 struct ThemeListView: View {
     @State var themesModel = ThemesViewModel()
+    @State var selectedTheme: Theme?
+    @State private var cellData: [Int: ThemeListPreferenceData] = [:]
+    //@State private var selectedThemeGeoData: ThemeListPreferenceData?
     
     var body: some View {
-        ZStack {
-            // FloatingThemeListItem()
-            // Scales without affecting list
             GeometryReader { geometry in
-                NavigationView {
-                    ScrollView {
-                        LazyVStack(spacing: 0) {
-                            ForEach(themesModel.themes, id: \.id) { theme in
-                                ThemeListItem(theme: theme, geoWidth: geometry.size.width - 32)
-                            }
-                        }
-                        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-                        Button(action: {
-                            NetworkManager.shared.getThemes { themes in
-                                DispatchQueue.main.async {
-                                    themesModel.themes = themes
+                ZStack(alignment: .topLeading) {
+                    NavigationView {
+                        ScrollView {
+                            LazyVStack(spacing: 16) {
+                                ForEach(themesModel.themes, id: \.id) { theme in
+                                    ThemeListItem(theme: theme,
+                                                  geoWidth: geometry.size.width - 32,
+                                                  selectedTheme: $selectedTheme)
+                                        .onTapGesture {
+                                            selectedTheme = theme
+                                        }
                                 }
                             }
-                        }, label: {
-                            Text("Fetch Themes")
-                        })
-                    }.navigationBarTitle("Themes")
+                            .onPreferenceChange(ThemeListPreferenceKey.self) { preferences in
+                                for p in preferences {
+                                    self.cellData[p.themeId] = p
+                                }
+                            }
+                            Text("Hello, World!")
+                            Button(action: {
+                                NetworkManager.shared.getThemes { themes in
+                                    DispatchQueue.main.async {
+                                        themesModel.themes = themes
+                                    }
+                                }
+                            }, label: {
+                                Text("Fetch Themes")
+                            })
+                        }.navigationBarTitle("Themes")
+                    }
+
+                    if let currentTheme = selectedTheme, let currentThemeLayout = cellData[currentTheme.id] {
+                        ThemeListItem(theme: currentTheme,
+                                      geoWidth: currentThemeLayout.geoWidth,
+                                      selectedTheme: $selectedTheme)
+                            .background(Color.red)
+                            .frame(width: currentThemeLayout.rect.width, height: currentThemeLayout.rect.height)
+                            .offset(x: currentThemeLayout.rect.minX, y: currentThemeLayout.rect.minY)
+                            .onTapGesture {
+                                selectedTheme = nil
+                            }
+                    }
+
+                }
+                .edgesIgnoringSafeArea(.all)
+                .coordinateSpace(name: themeListCoordSpace)
+                .onAppear {
+        //            NetworkManager.shared.getThemes { themes in
+        //                DispatchQueue.main.async {
+        //                    themesModel.themes = themes
+        //                }
+        //            }
+                    themesModel.themes = NetworkManager.shared.testGetThemes()
                 }
             }
-        }
-        .onAppear {
-//            NetworkManager.shared.getThemes { themes in
-//                DispatchQueue.main.async {
-//                    themesModel.themes = themes
-//                }
-//            }
-            themesModel.themes = NetworkManager.shared.testGetThemes()
-        }
     }
 }
 

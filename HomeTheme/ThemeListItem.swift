@@ -11,6 +11,7 @@ struct ThemeListItem: View {
     @State var theme: Theme
     @State var isOpen = false
     @State var geoWidth: CGFloat
+    @Binding var selectedTheme: Theme?
 
     var body: some View {
         VStack(alignment: .center) {
@@ -31,22 +32,17 @@ struct ThemeListItem: View {
                     .cornerRadius(isOpen ? 0 : 16)
             )
         }
-        .onTapGesture {
-            if !isOpen {
-                withAnimation {
-                    isOpen = true
-                    geoWidth = geoWidth + 32
-                }
-            } else {
-                withAnimation {
-                    isOpen = false
-                    geoWidth = geoWidth - 32
-                }
+        .background(
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(Color.clear)
+                    .preference(key: ThemeListPreferenceKey.self,
+                                value: [ThemeListPreferenceData(themeId: theme.id,
+                                                                rect: geometry.frame(in: .named(themeListCoordSpace)),
+                                                                geoWidth: geoWidth)])
             }
-        }
-
+        )
     }
-    // iconWidth * 4 + paddingUnit * 10 = totalWidth
 
     var iconSize: CGFloat {
         return geoWidth / 6
@@ -54,19 +50,6 @@ struct ThemeListItem: View {
     var iconPadding: CGFloat {
         let leftover = geoWidth - iconSize * 4
         return leftover / 10
-    }
-}
-
-struct PreferenceViewSetter: View {
-    let themeId: Int
-
-    var body: some View {
-        GeometryReader { geometry in
-            Rectangle()
-                .fill(Color.clear)
-                .preference(key: ThemeListPreferenceKey.self,
-                            value: [ThemeListPreferenceData(themeId: self.themeId, rect: geometry.frame(in: .named(themeListCoordSpace)))])
-        }
     }
 }
 
@@ -87,7 +70,7 @@ struct ThemeListItem_Previews: PreviewProvider {
 
         return
             GeometryReader { geometry in
-                ThemeListItem(theme: theme, geoWidth: geometry.size.width)
+                ThemeListItem(theme: theme, geoWidth: geometry.size.width, selectedTheme: Binding.constant(nil))
             }
     }
 }
