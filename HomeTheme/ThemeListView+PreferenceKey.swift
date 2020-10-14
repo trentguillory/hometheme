@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+let themeListGap: CGFloat = 32
 let themeListCoordSpace = "ThemeListCoordinateSpace"
 
 struct ThemeListPreferenceData: Equatable {

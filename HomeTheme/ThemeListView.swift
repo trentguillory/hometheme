@@ -12,6 +12,8 @@ struct ThemeListView: View {
     @State var selectedTheme: Theme?
     @State private var cellData: [Int: ThemeListPreferenceData] = [:]
     //@State private var selectedThemeGeoData: ThemeListPreferenceData?
+
+    @State private var detailViewOpen = false
     
     var body: some View {
             GeometryReader { geometry in
@@ -21,8 +23,9 @@ struct ThemeListView: View {
                             LazyVStack(spacing: 16) {
                                 ForEach(themesModel.themes, id: \.id) { theme in
                                     ThemeListItem(theme: theme,
-                                                  geoWidth: geometry.size.width - 32,
-                                                  selectedTheme: $selectedTheme)
+                                                  geoWidth: geometry.size.width,
+                                                  selectedTheme: $selectedTheme,
+                                                  isOpen: .constant(false))
                                         .onTapGesture {
                                             selectedTheme = theme
                                         }
@@ -49,12 +52,24 @@ struct ThemeListView: View {
                     if let currentTheme = selectedTheme, let currentThemeLayout = cellData[currentTheme.id] {
                         ThemeListItem(theme: currentTheme,
                                       geoWidth: currentThemeLayout.geoWidth,
-                                      selectedTheme: $selectedTheme)
-                            .background(Color.red)
-                            .frame(width: currentThemeLayout.rect.width, height: currentThemeLayout.rect.height)
-                            .offset(x: currentThemeLayout.rect.minX, y: currentThemeLayout.rect.minY)
+                                      selectedTheme: $selectedTheme,
+                                      isOpen: $detailViewOpen)
+                            .offset(x: detailViewOpen ? 0 : currentThemeLayout.rect.minX,
+                                    y: detailViewOpen ? 0 : currentThemeLayout.rect.minY)
                             .onTapGesture {
-                                selectedTheme = nil
+                                withAnimation {
+                                    detailViewOpen = false
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    selectedTheme = nil
+                                }
+                            }
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation {
+                                        detailViewOpen = true
+                                    }
+                                }
                             }
                     }
 

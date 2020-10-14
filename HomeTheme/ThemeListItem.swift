@@ -9,9 +9,17 @@ import SwiftUI
 
 struct ThemeListItem: View {
     @State var theme: Theme
-    @State var isOpen = false
     @State var geoWidth: CGFloat
     @Binding var selectedTheme: Theme?
+    @Binding var isOpen: Bool
+
+    var adjustedGeoWidth: CGFloat {
+        if isOpen {
+            return geoWidth
+        } else {
+            return geoWidth - themeListGap
+        }
+    }
 
     var body: some View {
         VStack(alignment: .center) {
@@ -45,10 +53,10 @@ struct ThemeListItem: View {
     }
 
     var iconSize: CGFloat {
-        return geoWidth / 6
+        return adjustedGeoWidth / 6
     }
     var iconPadding: CGFloat {
-        let leftover = geoWidth - iconSize * 4
+        let leftover = adjustedGeoWidth - iconSize * 4
         return leftover / 10
     }
 }
@@ -70,7 +78,7 @@ struct ThemeListItem_Previews: PreviewProvider {
 
         return
             GeometryReader { geometry in
-                ThemeListItem(theme: theme, geoWidth: geometry.size.width, selectedTheme: Binding.constant(nil))
+                ThemeListItem(theme: theme, geoWidth: geometry.size.width, selectedTheme: Binding.constant(nil), isOpen: .constant(false))
             }
     }
 }
