@@ -14,6 +14,10 @@ struct ThemeDetailView: View {
     @Binding var isOpen: Bool
 
     @State private var preFadeIn = true
+    @State private var headerYOffset: CGFloat = 0
+    @State private var headerHeight: CGFloat = 100
+
+    var innerVStackPadding: CGFloat = 32
 
     var adjustedGeoWidth: CGFloat {
         if isOpen {
@@ -24,19 +28,42 @@ struct ThemeDetailView: View {
     }
 
     var body: some View {
-        VStack(alignment: .center) {
+        ZStack(alignment: .topLeading) {
             ThemeListItem(theme: theme, geoWidth: geoWidth, selectedTheme: $selectedTheme, isOpen: $isOpen)
+                .offset(x: 0, y: headerYOffset)
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                headerHeight = geometry.size.height
+                            }
+                    }
+                )
 
             if isOpen {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         Text(theme.title)
                             .font(.title)
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+                            .padding(.top, headerHeight + innerVStackPadding + 24)
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .preference(key: OffsetPreferenceKey.self,
+                                                    value: geometry.frame(in: .named("frameLayer")).minY)
+                                }
+                            )
+                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
                             .font(.title2)
                     }
-                    .padding(32)
+                    .padding(innerVStackPadding)
                 }
+                .coordinateSpace(name: "frameLayer")
+                .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
+                    //print("scrollview offset: \(offset - innerVStackPadding)")
+                    let yOffset = offset - innerVStackPadding
+                    headerYOffset = yOffset
+                })
                 .padding(preFadeIn
                     ? EdgeInsets(top: 60, leading: 0, bottom: 0, trailing: 0)
                     : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -50,6 +77,11 @@ struct ThemeDetailView: View {
         }
         .background(Color.background)
     }
+}
+
+private struct OffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {}
 }
 
 struct ThemeDetailView_Previews: PreviewProvider {

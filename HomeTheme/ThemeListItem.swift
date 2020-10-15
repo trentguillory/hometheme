@@ -34,6 +34,7 @@ struct ThemeListItem: View {
                                 : EdgeInsets(top: iconPadding, leading: iconPadding, bottom: iconPadding, trailing: iconPadding))
                     Text(theme.title).font(.caption).foregroundColor(.white)
                         .padding(iconPadding)
+                        .opacity(isOpen ? 0 : 1)
                 }
             }
             .background(
