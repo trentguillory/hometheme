@@ -29,7 +29,9 @@ struct ThemeListItem: View {
                         IconView(icon: theme.icons[row * 4 + col], iconWidth: iconSize)
                             .padding(iconPadding)
                     }
-                    .padding(iconPadding)
+                    .padding(isOpen
+                                ? EdgeInsets(top: iconPadding * 4, leading: iconPadding, bottom: iconPadding, trailing: iconPadding)
+                                : EdgeInsets(top: iconPadding, leading: iconPadding, bottom: iconPadding, trailing: iconPadding))
                     Text(theme.title).font(.caption).foregroundColor(.white)
                         .padding(iconPadding)
                 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ThemeListView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State var themesModel = ThemesViewModel()
     @State var selectedTheme: Theme?
     @State private var cellData: [Int: ThemeListPreferenceData] = [:]
@@ -47,10 +48,16 @@ struct ThemeListView: View {
                                 Text("Fetch Themes")
                             })
                         }.navigationBarTitle("Themes")
-                    }
+                    }.blur(radius: detailViewOpen ? 25 : 0, opaque: true)
+
+//                    if detailViewOpen {
+//                        VisualEffectView(uiVisualEffect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light))
+//                            .edgesIgnoringSafeArea(.all)
+//                            .transition(.opacity)
+//                    }
 
                     if let currentTheme = selectedTheme, let currentThemeLayout = cellData[currentTheme.id] {
-                        ThemeListItem(theme: currentTheme,
+                        ThemeDetailView(theme: currentTheme,
                                       geoWidth: currentThemeLayout.geoWidth,
                                       selectedTheme: $selectedTheme,
                                       isOpen: $detailViewOpen)

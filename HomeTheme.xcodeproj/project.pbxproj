@@ -22,6 +22,8 @@
 		845A036D252F9A4900E66527 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845A036C252F9A4900E66527 /* IconView.swift */; };
 		845A0372252F9CC200E66527 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845A0371252F9CC200E66527 /* GridView.swift */; };
 		8492D4422536628D00AD999D /* ThemeListView+PreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8492D4412536628D00AD999D /* ThemeListView+PreferenceKey.swift */; };
+		8492D4472537B3DB00AD999D /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8492D4462537B3DB00AD999D /* ThemeDetailView.swift */; };
+		8492D44C2537B4F900AD999D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8492D44B2537B4F900AD999D /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		845A036C252F9A4900E66527 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		845A0371252F9CC200E66527 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		8492D4412536628D00AD999D /* ThemeListView+PreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeListView+PreferenceKey.swift"; sourceTree = "<group>"; };
+		8492D4462537B3DB00AD999D /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
+		8492D44B2537B4F900AD999D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				84519A5D2526D2D70055542B /* ThemeListView.swift */,
+				8492D44B2537B4F900AD999D /* Extensions.swift */,
 				84519A54252693B80055542B /* NetworkManager.swift */,
 				84519A56252696FE0055542B /* Models */,
 				84519A292526939F0055542B /* HomeThemeApp.swift */,
@@ -123,6 +128,7 @@
 				84519A2F252693A20055542B /* Preview Content */,
 				84519A5F2526DBAA0055542B /* ThemesViewModel.swift */,
 				845A0367252F99C700E66527 /* ThemeListItem.swift */,
+				8492D4462537B3DB00AD999D /* ThemeDetailView.swift */,
 				845A036C252F9A4900E66527 /* IconView.swift */,
 				845A0371252F9CC200E66527 /* GridView.swift */,
 				8492D4412536628D00AD999D /* ThemeListView+PreferenceKey.swift */,
@@ -295,12 +301,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				84519A5E2526D2D70055542B /* ThemeListView.swift in Sources */,
+				8492D4472537B3DB00AD999D /* ThemeDetailView.swift in Sources */,
 				84519A602526DBAA0055542B /* ThemesViewModel.swift in Sources */,
 				8492D4422536628D00AD999D /* ThemeListView+PreferenceKey.swift in Sources */,
 				84519A55252693B80055542B /* NetworkManager.swift in Sources */,
 				84519A582526970D0055542B /* Theme.swift in Sources */,
 				845A036D252F9A4900E66527 /* IconView.swift in Sources */,
 				845A0368252F99C700E66527 /* ThemeListItem.swift in Sources */,
+				8492D44C2537B4F900AD999D /* Extensions.swift in Sources */,
 				84519A5A2526976F0055542B /* Asset.swift in Sources */,
 				84519A2C2526939F0055542B /* ContentView.swift in Sources */,
 				845A0372252F9CC200E66527 /* GridView.swift in Sources */,
