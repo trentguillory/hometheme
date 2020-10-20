@@ -17,6 +17,9 @@ struct ThemeDetailView: View {
     @State private var headerYOffset: CGFloat = 0
     @State private var headerHeight: CGFloat = 100
 
+    //@State var viewScale: CGFloat = 1
+    @State var gestureOffset: CGFloat = 0
+
     var innerVStackPadding: CGFloat = 32
 
     var adjustedGeoWidth: CGFloat {
@@ -24,6 +27,42 @@ struct ThemeDetailView: View {
             return geoWidth
         } else {
             return geoWidth - themeListGap
+        }
+    }
+
+    // create separate gesture for this
+//    var viewScale: CGFloat {
+//        if headerYOffset >= 0 {
+//            return 1 - gestureOffset * 0.01
+//        } else {
+//            return 1
+//        }
+//    }
+
+    @State var viewScaleToUse: CGFloat = 1
+    @State var isCheckingPreferences: Bool = true
+
+    func setViewScale() {
+        // using just scrollview offset
+//        if headerYOffset >= 0 {
+//            withAnimation {
+//                viewScaleToUse = 1 - headerYOffset * 0.01
+//            }
+//        } else {
+//            withAnimation {
+//                viewScaleToUse = 1
+//            }
+//        }
+
+        // using gesture
+        if headerYOffset >= 0 {
+            withAnimation {
+                viewScaleToUse = min(1, 1 - gestureOffset * 0.01)
+            }
+        } else {
+            withAnimation {
+                viewScaleToUse = 1
+            }
         }
     }
 
@@ -60,9 +99,14 @@ struct ThemeDetailView: View {
                 }
                 .coordinateSpace(name: "frameLayer")
                 .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
-                    //print("scrollview offset: \(offset - innerVStackPadding)")
-                    let yOffset = offset - innerVStackPadding
-                    headerYOffset = yOffset
+                    if isCheckingPreferences {
+                        let yOffset = offset - innerVStackPadding
+                        //print("scrollview offset: \(yOffset)")
+                        headerYOffset = yOffset
+                        DispatchQueue.main.async {
+                            setViewScale()
+                        }
+                    }
                 })
                 .padding(preFadeIn
                     ? EdgeInsets(top: 60, leading: 0, bottom: 0, trailing: 0)
@@ -76,6 +120,22 @@ struct ThemeDetailView: View {
             }
         }
         .background(Color.background)
+        .scaleEffect(viewScaleToUse)
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    if headerYOffset > 0 {
+                        isCheckingPreferences = false
+                    }
+                    gestureOffset = gesture.translation.height
+                    setViewScale()
+                    print(gesture.translation)
+                }
+                .onEnded { _ in
+                    isCheckingPreferences = true
+                    viewScaleToUse = 1
+                }
+        )
     }
 }
 
