@@ -44,6 +44,7 @@ struct ThemeDetailView: View {
             ZStack(alignment: .topLeading) {
                 ThemeListItem(theme: theme, geoWidth: geoWidth, selectedTheme: $selectedTheme, isOpen: $isOpen)
                     .offset(x: 0, y: headerYOffset)
+                    .zIndex(1)
                     .background(
                         GeometryReader { geometry in
                             Color.clear
@@ -74,6 +75,8 @@ struct ThemeDetailView: View {
                             .padding(innerVStackPadding)
                         }
                     }
+                    .zIndex(0)
+                    .background(Color.background)
                     .coordinateSpace(name: "frameLayer")
                     .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
                         let yOffset = offset - innerVStackPadding
@@ -97,7 +100,6 @@ struct ThemeDetailView: View {
                 }
             }
             .zIndex(0)
-            .background(Color.background)
             .cornerRadius(viewScaleToUse == 1 ? 0 : 32)
             .scaleEffect(viewScaleToUse)
 
@@ -124,7 +126,9 @@ struct ThemeDetailView: View {
                                     if viewScaleToUse <= 0.8 {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                             withAnimation {
+                                                preFadeIn = true
                                                 isOpen = false
+                                                viewScaleToUse = 1
                                             }
                                         }
                                     } else {
