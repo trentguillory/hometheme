@@ -29,7 +29,6 @@ struct ThemeDetailView: View {
 
     @State var viewScaleToUse: CGFloat = 1
     @State var isDraggingDown: Bool = false
-    @State private var scrollTarget: CGFloat?
 
     func setViewScale(with offset: CGFloat) {
         withAnimation {
@@ -38,12 +37,7 @@ struct ThemeDetailView: View {
         }
     }
 
-    var useDragOverlay: Bool {
-        if isDraggingDown {
-            return false
-        }
-        return headerYOffset > 0
-    }
+    @State var useDragOverlay = true
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -78,23 +72,18 @@ struct ThemeDetailView: View {
                                     .font(.title2)
                             }
                             .padding(innerVStackPadding)
-                            .onChange(of: scrollTarget) { target in
-                                // THIS HACK IS QUESTIONABLE
-                                if let target = target {
-                                    scrollTarget = nil
-                                    let normalizedOffset = target * 0.005
-                                    withAnimation {
-                                        proxy.scrollTo(444,
-                                                       anchor: UnitPoint(x: UnitPoint.center.x, y: UnitPoint.center.y + normalizedOffset))
-                                    }
-                                }
-                            }
                         }
                     }
                     .coordinateSpace(name: "frameLayer")
                     .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
                         let yOffset = offset - innerVStackPadding
                         headerYOffset = yOffset
+
+                        if headerYOffset >= -32 {
+                            useDragOverlay = true
+                        } else {
+                            useDragOverlay = false
+                        }
                     })
                     .padding(preFadeIn
                         ? EdgeInsets(top: 60, leading: 0, bottom: 0, trailing: 0)
@@ -107,38 +96,53 @@ struct ThemeDetailView: View {
                     }
                 }
             }
-            .zIndex(useDragOverlay ? 0 : 1)
+            .zIndex(0)
+            .background(Color.background)
             .cornerRadius(viewScaleToUse == 1 ? 0 : 32)
             .scaleEffect(viewScaleToUse)
 
-            // Drag Capture
-            VStack {}
+            if useDragOverlay {
+                // Drag-To-Dismiss Capture
+                VStack {
+                    VStack {}
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .background(Color.black.opacity(0.001).contentShape(Rectangle()))
+                        .gesture(
+                            DragGesture()
+                                .onChanged { gesture in
+                                    let yGesture = gesture.translation.height
+
+                                    if yGesture < 0 {
+                                        // scrolling down
+                                        useDragOverlay = false
+                                    } else {
+                                        // scrolling up
+                                        setViewScale(with: yGesture)
+                                    }
+                                }
+                                .onEnded { gesture in
+                                    if viewScaleToUse <= 0.8 {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            withAnimation {
+                                                isOpen = false
+                                            }
+                                        }
+                                    } else {
+                                        withAnimation {
+                                            viewScaleToUse = 1
+                                        }
+                                    }
+                                }
+                        )
+
+                    VStack {}
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                }
+                .zIndex(1)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                .background(Color.red)
-                .opacity(0.5)
-                .zIndex(useDragOverlay ? 1 : 0)
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let yGesture = gesture.translation.height
-                            isDraggingDown = yGesture < 0
 
-                            if isDraggingDown {
-                                scrollTarget = yGesture
-                            }
-
-                            setViewScale(with: yGesture)
-                        }
-                        .onEnded { _ in
-                            isDraggingDown = false\
-                            withAnimation {
-                                viewScaleToUse = 1
-                            }
-                            print("done")
-                        }
-                )
+            }
         }
-        .background(Color.background)
     }
 }
 

@@ -63,18 +63,19 @@ struct ThemeListView: View {
                                       isOpen: $detailViewOpen)
                             .offset(x: detailViewOpen ? 0 : currentThemeLayout.rect.minX,
                                     y: detailViewOpen ? 0 : currentThemeLayout.rect.minY)
-                            .onTapGesture {
-                                withAnimation {
-                                    detailViewOpen = false
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    selectedTheme = nil
-                                }
-                            }
                             .onAppear {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     withAnimation {
                                         detailViewOpen = true
+                                    }
+                                }
+                            }
+                            .onChange(of: detailViewOpen) { _ in
+                                if detailViewOpen == false {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                        withAnimation {
+                                            selectedTheme = nil
+                                        }
                                     }
                                 }
                             }
