@@ -17,9 +17,6 @@ struct ThemeDetailView: View {
     @State private var headerYOffset: CGFloat = 0
     @State private var headerHeight: CGFloat = 100
 
-    //@State var viewScale: CGFloat = 1
-    @State var gestureOffset: CGFloat = 0
-
     var innerVStackPadding: CGFloat = 32
 
     var adjustedGeoWidth: CGFloat {
@@ -30,112 +27,118 @@ struct ThemeDetailView: View {
         }
     }
 
-    // create separate gesture for this
-//    var viewScale: CGFloat {
-//        if headerYOffset >= 0 {
-//            return 1 - gestureOffset * 0.01
-//        } else {
-//            return 1
-//        }
-//    }
-
     @State var viewScaleToUse: CGFloat = 1
-    @State var isCheckingPreferences: Bool = true
+    @State var isDraggingDown: Bool = false
+    @State private var scrollTarget: CGFloat?
 
-    func setViewScale() {
-        // using just scrollview offset
-//        if headerYOffset >= 0 {
-//            withAnimation {
-//                viewScaleToUse = 1 - headerYOffset * 0.01
-//            }
-//        } else {
-//            withAnimation {
-//                viewScaleToUse = 1
-//            }
-//        }
-
-        // using gesture
-        if headerYOffset >= 0 {
-            withAnimation {
-                viewScaleToUse = min(1, 1 - gestureOffset * 0.01)
-            }
-        } else {
-            withAnimation {
-                viewScaleToUse = 1
-            }
+    func setViewScale(with offset: CGFloat) {
+        withAnimation {
+            let calculatedScale = min(1, 1 - offset * 0.005)
+            viewScaleToUse = max(0.8, calculatedScale)
         }
+    }
+
+    var useDragOverlay: Bool {
+        if isDraggingDown {
+            return false
+        }
+        return headerYOffset > 0
     }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            ThemeListItem(theme: theme, geoWidth: geoWidth, selectedTheme: $selectedTheme, isOpen: $isOpen)
-                .offset(x: 0, y: headerYOffset)
-                .background(
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onAppear {
-                                headerHeight = geometry.size.height
-                            }
-                    }
-                )
-
-            if isOpen {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text(theme.title)
-                            .font(.title)
-                            .padding(.top, headerHeight + innerVStackPadding + 24)
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .preference(key: OffsetPreferenceKey.self,
-                                                    value: geometry.frame(in: .named("frameLayer")).minY)
+            ZStack(alignment: .topLeading) {
+                ThemeListItem(theme: theme, geoWidth: geoWidth, selectedTheme: $selectedTheme, isOpen: $isOpen)
+                    .offset(x: 0, y: headerYOffset)
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    headerHeight = geometry.size.height
                                 }
-                            )
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-                            .font(.title2)
-                    }
-                    .padding(innerVStackPadding)
-                }
-                .coordinateSpace(name: "frameLayer")
-                .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
-                    if isCheckingPreferences {
-                        let yOffset = offset - innerVStackPadding
-                        //print("scrollview offset: \(yOffset)")
-                        headerYOffset = yOffset
-                        DispatchQueue.main.async {
-                            setViewScale()
+                        }
+                    )
+
+                if isOpen {
+                    ScrollView {
+                        ScrollViewReader { (proxy: ScrollViewProxy) in
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text(theme.title)
+                                    .font(.title)
+                                    .id(444)
+                                    .padding(.top, headerHeight + innerVStackPadding + 24)
+                                    .background(
+                                        GeometryReader { geometry in
+                                            Color.clear
+                                                .preference(key: OffsetPreferenceKey.self,
+                                                            value: geometry.frame(in: .named("frameLayer")).minY)
+                                        }
+                                    )
+                                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+                                    .font(.title2)
+                            }
+                            .padding(innerVStackPadding)
+                            .onChange(of: scrollTarget) { target in
+                                // THIS HACK IS QUESTIONABLE
+                                if let target = target {
+                                    scrollTarget = nil
+                                    let normalizedOffset = target * 0.005
+                                    withAnimation {
+                                        proxy.scrollTo(444,
+                                                       anchor: UnitPoint(x: UnitPoint.center.x, y: UnitPoint.center.y + normalizedOffset))
+                                    }
+                                }
+                            }
                         }
                     }
-                })
-                .padding(preFadeIn
-                    ? EdgeInsets(top: 60, leading: 0, bottom: 0, trailing: 0)
-                    : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .opacity(preFadeIn ? 0 : 1)
-                .onAppear {
-                    withAnimation {
-                        preFadeIn = false
+                    .coordinateSpace(name: "frameLayer")
+                    .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
+                        let yOffset = offset - innerVStackPadding
+                        headerYOffset = yOffset
+                    })
+                    .padding(preFadeIn
+                        ? EdgeInsets(top: 60, leading: 0, bottom: 0, trailing: 0)
+                        : EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .opacity(preFadeIn ? 0 : 1)
+                    .onAppear {
+                        withAnimation {
+                            preFadeIn = false
+                        }
                     }
                 }
             }
+            .zIndex(useDragOverlay ? 0 : 1)
+            .cornerRadius(viewScaleToUse == 1 ? 0 : 32)
+            .scaleEffect(viewScaleToUse)
+
+            // Drag Capture
+            VStack {}
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .background(Color.red)
+                .opacity(0.5)
+                .zIndex(useDragOverlay ? 1 : 0)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            let yGesture = gesture.translation.height
+                            isDraggingDown = yGesture < 0
+
+                            if isDraggingDown {
+                                scrollTarget = yGesture
+                            }
+
+                            setViewScale(with: yGesture)
+                        }
+                        .onEnded { _ in
+                            isDraggingDown = false\
+                            withAnimation {
+                                viewScaleToUse = 1
+                            }
+                            print("done")
+                        }
+                )
         }
         .background(Color.background)
-        .scaleEffect(viewScaleToUse)
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    if headerYOffset > 0 {
-                        isCheckingPreferences = false
-                    }
-                    gestureOffset = gesture.translation.height
-                    setViewScale()
-                    print(gesture.translation)
-                }
-                .onEnded { _ in
-                    isCheckingPreferences = true
-                    viewScaleToUse = 1
-                }
-        )
     }
 }
 
