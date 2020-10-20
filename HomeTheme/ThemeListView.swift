@@ -12,8 +12,6 @@ struct ThemeListView: View {
     @State var themesModel = ThemesViewModel()
     @State var selectedTheme: Theme?
     @State private var cellData: [Int: ThemeListPreferenceData] = [:]
-    //@State private var selectedThemeGeoData: ThemeListPreferenceData?
-
     @State private var detailViewOpen = false
     
     var body: some View {
@@ -27,6 +25,8 @@ struct ThemeListView: View {
                                                   geoWidth: geometry.size.width,
                                                   selectedTheme: $selectedTheme,
                                                   isOpen: .constant(false))
+                                        .opacity(selectedTheme == theme ? 0 : 1)
+                                        .animation(.none)
                                         .onTapGesture {
                                             selectedTheme = theme
                                         }
@@ -50,12 +50,6 @@ struct ThemeListView: View {
                         }.navigationBarTitle("Themes")
                     }.blur(radius: detailViewOpen ? 25 : 0, opaque: true)
 
-//                    if detailViewOpen {
-//                        VisualEffectView(uiVisualEffect: UIBlurEffect(style: colorScheme == .dark ? .dark : .light))
-//                            .edgesIgnoringSafeArea(.all)
-//                            .transition(.opacity)
-//                    }
-
                     if let currentTheme = selectedTheme, let currentThemeLayout = cellData[currentTheme.id] {
                         ThemeDetailView(theme: currentTheme,
                                       geoWidth: currentThemeLayout.geoWidth,
@@ -65,14 +59,14 @@ struct ThemeListView: View {
                                     y: detailViewOpen ? 0 : currentThemeLayout.rect.minY)
                             .onAppear {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    withAnimation {
+                                    withAnimation(Animation.spring()) {
                                         detailViewOpen = true
                                     }
                                 }
                             }
                             .onChange(of: detailViewOpen) { _ in
                                 if detailViewOpen == false {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) {
                                         withAnimation {
                                             selectedTheme = nil
                                         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Theme: Codable {
+struct Theme: Codable, Equatable {
     var id: Int
     var title: String
     var description: String
@@ -49,5 +49,9 @@ struct Theme: Codable {
         try container.encode(widgetPhotos, forKey: .widgetPhotos)
         try container.encode(backgrounds, forKey: .backgrounds)
         try container.encode(previews, forKey: .previews)
+    }
+
+    static func == (lhs: Theme, rhs: Theme) -> Bool {
+        lhs.id == rhs.id
     }
 }

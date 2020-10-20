@@ -125,7 +125,7 @@ struct ThemeDetailView: View {
                                 .onEnded { gesture in
                                     if viewScaleToUse <= 0.8 {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            withAnimation {
+                                            withAnimation(Animation.spring()) {
                                                 preFadeIn = true
                                                 isOpen = false
                                                 viewScaleToUse = 1

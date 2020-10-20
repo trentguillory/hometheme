@@ -33,6 +33,7 @@ struct ThemeListItem: View {
                                 ? EdgeInsets(top: iconPadding * 4, leading: iconPadding, bottom: iconPadding, trailing: iconPadding)
                                 : EdgeInsets(top: iconPadding, leading: iconPadding, bottom: iconPadding, trailing: iconPadding))
                     Text(theme.title).font(.caption).foregroundColor(.white)
+                        .frame(maxWidth: iconSize * 5)
                         .padding(iconPadding)
                         .opacity(isOpen ? 0 : 1)
                 }
