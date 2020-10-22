@@ -16,6 +16,14 @@ public extension Color {
         #endif
     }
 
+    static var foreground: Color {
+        #if os(macOS)
+        return Color(NSColor.label)
+        #else
+        return Color(UIColor.label)
+        #endif
+    }
+
     static var secondaryBackground: Color {
         #if os(macOS)
         return Color(NSColor.underPageBackgroundColor)

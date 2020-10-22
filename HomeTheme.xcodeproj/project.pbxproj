@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		843FD5EB254229BC00B1F62F /* IconGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843FD5EA254229BC00B1F62F /* IconGrid.swift */; };
 		84519A2A2526939F0055542B /* HomeThemeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A292526939F0055542B /* HomeThemeApp.swift */; };
 		84519A2C2526939F0055542B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84519A2B2526939F0055542B /* ContentView.swift */; };
 		84519A2E252693A20055542B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84519A2D252693A20055542B /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		843FD5EA254229BC00B1F62F /* IconGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGrid.swift; sourceTree = "<group>"; };
 		84519A262526939F0055542B /* HomeTheme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeTheme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84519A292526939F0055542B /* HomeThemeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeThemeApp.swift; sourceTree = "<group>"; };
 		84519A2B2526939F0055542B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				84519A5F2526DBAA0055542B /* ThemesViewModel.swift */,
 				845A0367252F99C700E66527 /* ThemeListItem.swift */,
 				8492D4462537B3DB00AD999D /* ThemeDetailView.swift */,
+				843FD5EA254229BC00B1F62F /* IconGrid.swift */,
 				845A036C252F9A4900E66527 /* IconView.swift */,
 				845A0371252F9CC200E66527 /* GridView.swift */,
 				8492D4412536628D00AD999D /* ThemeListView+PreferenceKey.swift */,
@@ -312,6 +315,7 @@
 				84519A5A2526976F0055542B /* Asset.swift in Sources */,
 				84519A2C2526939F0055542B /* ContentView.swift in Sources */,
 				845A0372252F9CC200E66527 /* GridView.swift in Sources */,
+				843FD5EB254229BC00B1F62F /* IconGrid.swift in Sources */,
 				84519A2A2526939F0055542B /* HomeThemeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
